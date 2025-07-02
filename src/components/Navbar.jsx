@@ -2,11 +2,19 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Brain, Menu, X } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { openContactForm } from './Footer'
 
 const Navbar = () => {
   const { user, signOut } = useAuth()
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+ 
+
+  const handleHeroNav = (section) => {
+    setActiveSection(section)
+    document.getElementById('hero-section')?.scrollIntoView({ behavior: 'smooth' })
+    setIsMenuOpen(false)
+  }
 
   const navigation = user
     ? [
@@ -15,11 +23,11 @@ const Navbar = () => {
         { name: 'Messages', href: '/messages' },
         { name: 'Profile', href: '/profile' },
       ]
-    : [
-        { name: 'How it Works', href: '/how-it-works' },
-        { name: 'Find Talent', href: '/find-talent' },
-        { name: 'Find Work', href: '/find-work' },
-      ]
+      : [
+        { name: 'Home', href: '/' },
+        { name: 'Features', href: '#features', onClick: () => handleHeroNav('features') },
+        { name: 'Pricing', href: '#pricing', onClick: () => handleHeroNav('pricing') },
+      ];
 
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -34,7 +42,25 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
+            {!user && (
+              <>
+                <a href="#features" className="text-sm font-medium transition-colors hover:text-blue-600 text-gray-700 focus:outline-none">Features</a>
+                <a href="#pricing" className="text-sm font-medium transition-colors hover:text-blue-600 text-gray-700 focus:outline-none">Pricing</a>
+                <a href="#testimonials" className="text-sm font-medium transition-colors hover:text-blue-600 text-gray-700 focus:outline-none">Testimonials</a>
+                <a
+                  href="#contact"
+                  className="text-sm font-medium transition-colors hover:text-blue-600 text-gray-700 focus:outline-none"
+                  onClick={e => {
+                    e.preventDefault();
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    openContactForm();
+                  }}
+                >
+                  Contact Us
+                </a>
+              </>
+            )}
+            {user && navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
@@ -91,7 +117,25 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
           <div className="px-4 py-2 space-y-1">
-            {navigation.map((item) => (
+            {!user && (
+              <>
+                <a href="#features" className="block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-700 hover:text-blue-600 hover:bg-gray-50">Features</a>
+                <a href="#pricing" className="block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-700 hover:text-blue-600 hover:bg-gray-50">Pricing</a>
+                <a href="#testimonials" className="block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-700 hover:text-blue-600 hover:bg-gray-50">Testimonials</a>
+                <a
+                  href="#contact"
+                  className="block w-full text-left px-3 py-2 text-sm font-medium rounded-md transition-colors text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                  onClick={e => {
+                    e.preventDefault();
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    openContactForm();
+                  }}
+                >
+                  Contact Us
+                </a>
+              </>
+            )}
+            {user && navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}

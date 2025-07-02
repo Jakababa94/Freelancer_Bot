@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { FeaturesProvider } from './contexts/FeaturesContext'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import AuthForm from './components/AuthForm'
@@ -121,7 +122,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <FeaturesProvider>
+        <AppContent />
+      </FeaturesProvider>
     </AuthProvider>
   )
 }
