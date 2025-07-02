@@ -1,34 +1,124 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import AuthForm from './components/AuthForm'
+import Dashboard from './components/Dashboard'
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+  
+  return user ? <>{children}</> : <Navigate to="/login" />
+}
+
+const PublicRoute = ({ children }) => {
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+  
+  return user ? <Navigate to="/dashboard" /> : <>{children}</>
+}
+
+function AppContent() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <PublicRoute>
+                <Hero />
+              </PublicRoute>
+            } 
+          />
+          <Route 
+            path="/login" 
+            element={
+              <PublicRoute>
+                <AuthForm mode="login" />
+              </PublicRoute>
+            } 
+          />
+          <Route 
+            path="/signup" 
+            element={
+              <PublicRoute>
+                <AuthForm mode="signup" />
+              </PublicRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/projects" 
+            element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                  <p className="text-gray-600">Projects page coming soon...</p>
+                </div>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/messages" 
+            element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                  <p className="text-gray-600">Messages page coming soon...</p>
+                </div>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              <ProtectedRoute>
+                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                  <p className="text-gray-600">Profile page coming soon...</p>
+                </div>
+              </ProtectedRoute>
+            } 
+          />
+        </Routes>
+      </div>
+    </Router>
+  )
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }
 
