@@ -3,15 +3,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Mail, Lock, User, DollarSign } from 'lucide-react'
 
-// interface AuthFormProps {
-//   mode: 'login' | 'signup'
-// }
 
 const AuthForm = ({ mode }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [fullName, setFullName] = useState('')
-  const [userType, setUserType] = useState<'freelancer' | 'client'>('freelancer')
+  const [userType, setUserType] = useState('freelancer')
   const [hourlyRate, setHourlyRate] = useState('')
   const [skills, setSkills] = useState('')
   const [loading, setLoading] = useState(false)
@@ -42,7 +39,9 @@ const AuthForm = ({ mode }) => {
           user_type: userType,
           full_name: fullName,
           hourly_rate: userType === 'freelancer' ? parseFloat(hourlyRate) || null : null,
-          skills: userType === 'freelancer' ? skills.split(',').map(s => s.trim()) : null,
+          skills: userType === 'freelancer' && typeof skills === 'string' && skills.trim() !== ''
+            ? skills.split(',').map(s => s.trim())
+            : [],
         }
         const { error } = await signUp(email, password, userData)
         if (error) throw error
@@ -54,6 +53,8 @@ const AuthForm = ({ mode }) => {
       setLoading(false)
     }
   }
+
+  console.log('skills value:', skills, typeof skills)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -191,7 +192,7 @@ const AuthForm = ({ mode }) => {
                   <input
                     type="text"
                     value={skills}
-                    onChange={(e) => setSkills(e.target.value)}
+                    onChange={(e) => setSkills(e.target.value || '')}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="React, Node.js, Python, Design..."
                   />
