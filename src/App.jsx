@@ -5,6 +5,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import AuthForm from './components/AuthForm'
 import Dashboard from './components/Dashboard'
+import Footer from './components/Footer'
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth()
@@ -43,72 +44,75 @@ const PublicRoute = ({ children }) => {
 function AppContent() {
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 flex flex-col">
         <Navbar />
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <PublicRoute>
-                <Hero />
-              </PublicRoute>
-            } 
-          />
-          <Route 
-            path="/login" 
-            element={
-              <PublicRoute>
-                <AuthForm mode="login" />
-              </PublicRoute>
-            } 
-          />
-          <Route 
-            path="/signup" 
-            element={
-              <PublicRoute>
-                <AuthForm mode="signup" />
-              </PublicRoute>
-            } 
-          />
-          <Route 
-            path="/dashboard" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/projects" 
-            element={
-              <ProtectedRoute>
-                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                  <p className="text-gray-600">Projects page coming soon...</p>
-                </div>
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/messages" 
-            element={
-              <ProtectedRoute>
-                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                  <p className="text-gray-600">Messages page coming soon...</p>
-                </div>
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/profile" 
-            element={
-              <ProtectedRoute>
-                <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                  <p className="text-gray-600">Profile page coming soon...</p>
-                </div>
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
+        <div className="flex-1">
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <PublicRoute>
+                  <Hero />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/login" 
+              element={
+                <PublicRoute>
+                  <AuthForm mode="login" />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/signup" 
+              element={
+                <PublicRoute>
+                  <AuthForm mode="signup" />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/projects" 
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                    <p className="text-gray-600">Projects page coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/messages" 
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                    <p className="text-gray-600">Messages page coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                    <p className="text-gray-600">Profile page coming soon...</p>
+                  </div>
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </div>
+        <Footer />
       </div>
     </Router>
   )
